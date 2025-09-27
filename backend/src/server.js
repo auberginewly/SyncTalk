@@ -9,6 +9,8 @@ import { connectDB } from './lib/db.js';
 const app = express();
 const PORT = process.env.PORT;
 
+app.use(express.json()); // 解析 JSON 请求体
+
 app.use("/api/auth", authRoutes);
 
 app.listen(PORT, () => {
