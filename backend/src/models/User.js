@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-const UserSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     fullName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true, minlength: 6 },
@@ -15,9 +15,7 @@ const UserSchema = new mongoose.Schema({
 }, { timestamps: true });
 // 自动添加 createdAt 和 updatedAt 字段 并自动维护它们的值 创建和更新文档时
 
-
-// TODO
-UserSchema.pre("save", async function (next) {
+userSchema.pre("save", async function (next) {
     // 只在密码被修改或是新用户时才加密
     if (!this.isModified('password')) return next();
     try {
@@ -30,7 +28,17 @@ UserSchema.pre("save", async function (next) {
     }   
 });
 
-const User = mongoose.model("User", UserSchema);
+// 实例方法，用于比较密码
+userSchema.methods.comparePassword = async function (enteredPassword) {
+    // bcrypt.compare() 内部逻辑：
+    // 1. 从加密密码中提取盐值
+    // 2. 用相同盐值加密用户输入的密码
+    // 3. 比较两个加密结果是否相同
+    const isPasswordCorrect = await bcrypt.compare(enteredPassword, this.password);
+    return isPasswordCorrect;
+}
+
+const User = mongoose.model("User", userSchema);
 
 
 
