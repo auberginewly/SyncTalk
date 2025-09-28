@@ -3,6 +3,7 @@ import express from 'express';
 // dotenv.config();
 // 使用 'dotenv/config' 直接加载环境变量 这样也行
 import 'dotenv/config';
+import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.route.js';
 import { connectDB } from './lib/db.js';
 
@@ -10,6 +11,7 @@ const app = express();
 const PORT = process.env.PORT;
 
 app.use(express.json()); // 解析 JSON 请求体
+app.use(cookieParser()); // 解析 Cookie
 
 app.use("/api/auth", authRoutes);
 
@@ -18,3 +20,4 @@ app.listen(PORT, () => {
   // 启动服务器前连接数据库
   connectDB();
 });
+ 

@@ -114,3 +114,55 @@ export async function logout(req, res) {
   // 返回成功响应
   res.status(200).json({ message: "成功登出" });
 }
+
+export async function onboard(req, res) {
+  try {
+    // 获取用户ID
+    const userId = req.user._id;
+    // 获取其他字段
+    const { fullName, bio, nativeLanguage, learningLanguage, location } = req.body;
+    // 检查必填字段
+    if (!fullName || !bio || !nativeLanguage || !learningLanguage) {
+      return res.status(400).json({
+        message: "所有字段均为必填项",
+        missingFields: [
+          // 检查每个字段是否存在
+          !fullName && "fullName",
+          !bio && "bio",
+          !nativeLanguage && "nativeLanguage",
+          !learningLanguage && "learningLanguage",
+          !location && "location"
+        ].filter(Boolean)
+      });
+    }
+    // 更新用户信息
+    const updatedUser = await User.findByIdAndUpdate(userId, { 
+      ...req.body,
+      isOnboarded: true
+    }, { new: true });
+    // 检查更新后的用户信息
+    if (!updatedUser) {
+      return res.status(404).json({ message: "用户未找到" });
+    }
+    
+    // 使用trycatch 块捕获 Stream API 相关错误，防止影响主更新流程
+    try {
+      // upsert 有的时候是更新update有的时候是创建insert
+      await upsertStreamUser({
+        id: updatedUser._id.toString(),
+        name: updatedUser.fullName,
+        image: updatedUser.profilePicture || "",
+      });
+      console.log(`在 Stream 上成功创建或更新用户资料: ${updatedUser.fullName}`);
+    } catch (streamError) {
+      console.error("在 Stream 上更新用户资料失败:", streamError.message);
+    }
+
+    // 返回成功响应
+    res.status(200).json({ success: true, user: updatedUser });
+  } catch (error) {
+    // 处理错误
+    console.error("用户引导错误:", error);
+    res.status(500).json({ message: "服务器错误，请稍后再试" });
+  }
+}
