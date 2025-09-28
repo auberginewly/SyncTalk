@@ -15,8 +15,8 @@ export const protectRoute = async (req, res, next) => {
       return res.status(401).json({ message: "无效的令牌，请重新登录" });
     }
 
-    // 查找用户
-    const user = await User.findById(decoded.userId);
+    // 查找用户 不返回密码字段
+    const user = await User.findById(decoded.userId).select('-password');
     if (!user) {
       return res.status(401).json({ message: "用户不存在，请重新登录" });
     }           

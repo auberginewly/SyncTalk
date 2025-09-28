@@ -11,7 +11,7 @@ if (!apiKey || !apiSecret) {
 }
 
 // 初始化 Stream 客户端
-const serverClient = StreamChat.getInstance(apiKey, apiSecret);
+const streamClient = StreamChat.getInstance(apiKey, apiSecret);
 
 // 创建或更新 Stream 用户
 export const upsertStreamUser = async (userData) => {
@@ -27,8 +27,9 @@ export const upsertStreamUser = async (userData) => {
 //todo
 export const generateStreamToken = (userId) => {
     try {
-        const token = serverClient.createToken(userId);
-        return token;
+        // 保证 userId 是字符串
+        const userIDStr = userId.toString();
+        return streamClient.createToken(userIDStr);       
     } catch (error) {
         console.error("生成 Stream Token 失败:", error);
     }
