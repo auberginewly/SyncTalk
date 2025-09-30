@@ -1,18 +1,43 @@
 import React from 'react'
 import {MessageCircleDashed} from "lucide-react"
 import { Link } from 'react-router'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { signup } from '../lib/api'
+
 
 const SignUpPage = () => {
+
+  // 注册表单数据
   const [signupData, setSignupData] = React.useState({
     fullName: '',
     email: '',
     password: '',
   })
 
+  // 创建 QueryClient 实例
+  const queryClient = useQueryClient()
+
+  // 使用 useMutation 处理注册请求
+  // mutate 重命名为 signupMutation 以便语义化
+  // isPending 标识请求是否进行中
+  // error 捕获请求错误信息
+  const { mutate:signupMutation, isPending, error } = useMutation({
+    // 发送注册请求的函数
+    mutationFn: signup,
+    onSuccess: () => {
+      // 注册成功后，刷新当前用户信息
+      queryClient.invalidateQueries({ queryKey: ['authUser'] })
+    }
+    // onError 可以在这里处理错误，比如显示通知等，待优化
+  })
+
   const handleSignup = (e) => {
+    // 阻止表单默认提交行为
     e.preventDefault()
-    // Handle signup logic here
+    // 提交注册数据
+    signupMutation(signupData)
   }
+
   return (
     <div className="h-screen flex items-center justify-center p-4 sm:p-6 md:p-8" data-theme="forest">
       <div className='border border-primary/25 flex flex-col 
@@ -29,6 +54,14 @@ const SignUpPage = () => {
             </span>
           </div>
 
+          {/* 错误提示 */}
+          {error && (
+            <div className='alert alert-error mb-4'>
+              <span>{error.response.data.message}</span>
+            </div>
+          )}
+
+          {/* 注册表单 */}
           <div className="w-full">
             <form onSubmit={handleSignup} >
               <div className='space-y-4'>
@@ -104,7 +137,14 @@ const SignUpPage = () => {
 
                   {/* 注册提交按钮 */}
                   <button className='btn btn-primary w-full' type="submit">
-                    注册账号
+                    {isPending ? (
+                      <>
+                      <span className="loading loading-spinner loading-xs"></span>
+                      正在注册...
+                      </>
+                    ) : (
+                      "注册账号"
+                    )}
                   </button>
 
                   <div className='mt-4 text-center'>
@@ -148,3 +188,5 @@ const SignUpPage = () => {
 }
 
 export default SignUpPage
+
+// 如何登出？你只需要在devtools里删除cookie里的token jwt就行了 然后刷新页面
