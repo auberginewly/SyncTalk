@@ -11,6 +11,8 @@ import OnboardingPage from './pages/OnboardingPage.jsx'
 
 import { Toaster } from 'react-hot-toast'
 import PageLoader from './components/PageLoader.jsx'
+import useAuthUser from './hooks/useAuthUser.js'
+
 
 const App = () => {
   // 异步数据获取示例
@@ -38,6 +40,13 @@ const App = () => {
   // 使用自定义 Hook 获取认证用户信息
   const { isLoading, authUser } = useAuthUser()
 
+  // Boolean() 将任何值转换为布尔值
+  // null, undefined, 0, "" 会被转换为 false
+  // 其他值会被转换为 true
+  const isAuthenticated = Boolean(authUser) // 等价于 !!authUser
+  const isOnboarded = authUser?.isOnboarded  // 可选链操作符 ?. 处理不确定数据的常用方式
+
+
   // 安全访问，如果左侧是 null/undefined 就返回 undefined
   // 可选链操作符 ?. 处理不确定数据的常用方式
   // 从后端 server.js 返回的数据中获取 user 对象
@@ -58,14 +67,25 @@ const App = () => {
       <Routes>
         {/* 登陆保护路由
         只有在 authUser 存在时才能访问主页
-        否则重定向到登录页面 */}
-        <Route path='/' element={authUser ? <HomePage /> : <Navigate to="/login" />} />
-        <Route path='/signup' element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
-        <Route path='/login' element={!authUser ? <LoginPage /> : <Navigate to="/" />} />
-        <Route path='/notifications' element={authUser ? <NotificationsPage /> : <Navigate to="/login" />} />
-        <Route path='/call' element={authUser ? <CallPage /> : <Navigate to="/login" />} />
-        <Route path='/chat' element={authUser ? <ChatPage /> : <Navigate to="/login" />} />
-        <Route path='/onboarding' element={authUser ? <OnboardingPage /> : <Navigate to="/login" />} />
+        否则重定向到登录页面
+        提高可读性
+        */}
+
+
+        {/* 未登陆未完善信息判断如何处理 */}
+        <Route path='/' element={isAuthenticated && isOnboarded ? (
+              <HomePage />
+            ) : (
+              <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
+            )
+          } 
+        />
+        <Route path='/signup' element={!isAuthenticated ? <SignUpPage /> : <Navigate to="/" />} />
+        <Route path='/login' element={!isAuthenticated ? <LoginPage /> : <Navigate to="/" />} />
+        <Route path='/notifications' element={isAuthenticated ? <NotificationsPage /> : <Navigate to="/login" />} />
+        <Route path='/call' element={isAuthenticated ? <CallPage /> : <Navigate to="/login" />} />
+        <Route path='/chat' element={isAuthenticated ? <ChatPage /> : <Navigate to="/login" />} />
+        <Route path='/onboarding' element={isOnboarded ? <OnboardingPage /> : <Navigate to="/login" />} />
       </Routes>
 
       <Toaster />
