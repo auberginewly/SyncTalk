@@ -9,10 +9,8 @@ import CallPage from './pages/CallPage.jsx'
 import ChatPage from './pages/ChatPage.jsx'
 import OnboardingPage from './pages/OnboardingPage.jsx'
 
-import toast, { Toaster } from 'react-hot-toast'
-import { useState, useEffect } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import {axiosInstance} from './lib/axios.js'
+import { Toaster } from 'react-hot-toast'
+import PageLoader from './components/PageLoader.jsx'
 
 const App = () => {
   // 异步数据获取示例
@@ -37,21 +35,12 @@ const App = () => {
 
   // console.log(data)
 
-  // tanstack query 
-  const {data: authData, isLoading, error} = useQuery({
-    // 要使用数组形式的 queryKey
-    queryKey: ["authUser"],
-    queryFn: async () => {
-      // 使用 axios 进行数据请求
-      const res = await axiosInstance.get('/auth/me')
-      return res.data
-    },
-    retry: false, // 禁用自动重试
-  })
+  // 使用自定义 Hook 获取认证用户信息
+  const { isLoading, authUser } = useAuthUser()
+
   // 安全访问，如果左侧是 null/undefined 就返回 undefined
   // 可选链操作符 ?. 处理不确定数据的常用方式
   // 从后端 server.js 返回的数据中获取 user 对象
-  const authUser = authData?.user
 
   // 大括号创建了一个对象，使用 ES6 简写语法，输出变量和状态
   // 你会看到类似 {data: [...]} 的输出
@@ -59,6 +48,10 @@ const App = () => {
   // console.log({data})
   // console.log({isLoading})
   // console.log({error})
+
+  if (isLoading) {
+    return <PageLoader />
+  }
 
   return (
     <div className='h-screen' data-theme="night">
