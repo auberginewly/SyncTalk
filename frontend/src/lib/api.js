@@ -13,3 +13,10 @@ export const getAuthUser = async () => {
     const res = await axiosInstance.get('/auth/me')
     return res.data
 }
+
+// 完成用户引导
+export const completeOnboarding = async (userData) => {
+    // 发送 POST 请求到 /auth/onboarding
+    const response = await axiosInstance.post('/auth/onboarding', userData)
+    return response.data
+}

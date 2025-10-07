@@ -124,7 +124,7 @@ export async function onboard(req, res) {
     // 检查必填字段
     if (!fullName || !bio || !nativeLanguage || !learningLanguage) {
       return res.status(400).json({
-        message: "所有字段均为必填项",
+        message: "所有信息均为必填项",
         missingFields: [
           // 检查每个字段是否存在
           !fullName && "fullName",
