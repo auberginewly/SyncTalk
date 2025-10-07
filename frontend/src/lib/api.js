@@ -6,6 +6,11 @@ export const signup = async (signupData) => {
     return response.data
 }
 
+// 登陆函数
+export const login = async (loginData) => {
+    const response = await axiosInstance.post('/auth/login', loginData)
+    return response.data
+}
 
 // 查看当前登录用户信息
 export const getAuthUser = async () => {
