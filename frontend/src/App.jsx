@@ -12,6 +12,7 @@ import OnboardingPage from './pages/OnboardingPage.jsx'
 import { Toaster } from 'react-hot-toast'
 import PageLoader from './components/PageLoader.jsx'
 import useAuthUser from './hooks/useAuthUser.js'
+import Layout from './components/Layout.jsx'
 
 
 const App = () => {
@@ -63,7 +64,7 @@ const App = () => {
   }
 
   return (
-    <div className='h-screen' data-theme="night">
+    <div className='h-screen' data-theme="forest">
       <Routes>
         {/* 登陆保护路由
         只有在 authUser 存在时才能访问主页
@@ -74,7 +75,9 @@ const App = () => {
 
         {/* 未登陆未完善信息判断如何处理 */}
         <Route path='/' element={isAuthenticated && isOnboarded ? (
-              <HomePage />
+              <Layout showSidebar={true}>
+                <HomePage />
+              </Layout>
             ) : (
               <Navigate to={!isAuthenticated ? "/login" : "/onboarding"} />
             )
