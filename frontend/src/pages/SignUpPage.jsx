@@ -2,7 +2,7 @@ import React from 'react'
 import {MessageCircleDashed} from "lucide-react"
 import { Link } from 'react-router'
 import useSignup from '../hooks/useSignup'
-
+import useThemeStore from '../store/useThemeStore'
 
 const SignUpPage = () => {
 
@@ -15,6 +15,8 @@ const SignUpPage = () => {
 
   // 使用自定义的 useSignup Hook 处理注册逻辑
   const { signupMutation, isPending, error } = useSignup()
+
+  const {theme} = useThemeStore()
 
   // // 创建 QueryClient 实例
   // const queryClient = useQueryClient()
@@ -41,7 +43,7 @@ const SignUpPage = () => {
   }
 
   return (
-    <div className="h-screen flex items-center justify-center p-4 sm:p-6 md:p-8" data-theme="forest">
+    <div className="h-screen flex items-center justify-center p-4 sm:p-6 md:p-8" data-theme={theme}>
       <div className='border border-primary/25 flex flex-col 
       lg:flex-row w-full max-w-5xl mx-auto bg-base-100 
       rounded-xl shadow-lg overflow-hidden'>

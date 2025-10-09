@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { login } from '../lib/api'  // 来自 src/lib/api.js
 import { MessageCircleDashed } from 'lucide-react'
 import { Link } from 'react-router'
 import  useLogin  from '../hooks/useLogin'  // 自定义的登录钩子
+import useThemeStore from '../store/useThemeStore'
 
 const LoginPage = () => {
   const [loginData, setLoginData] = useState({
     email: '',
     password: '',
   })
+
+  const {theme} = useThemeStore()
   
   // const queryClient = useQueryClient()
 
@@ -32,7 +35,7 @@ const LoginPage = () => {
   }
 
   return (
-    <div className='h-screen flex items-center justify-center p-4 sm:p-6 md:p-8' data-theme="forest">
+    <div className='h-screen flex items-center justify-center p-4 sm:p-6 md:p-8' data-theme={theme}>
       <div className='border border-primary/25 flex flex-col lg:flex-row w-full max-w-5xl mx-auto bg-base-100 rounded-xl shadow-lg overflow-hidden'>
         {/* 登陆页面 - 左侧 */}
         <div className='w-full lg:w-1/2 p-4 sm:p-8 flex flex-col'>

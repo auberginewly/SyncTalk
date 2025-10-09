@@ -13,7 +13,7 @@ import { Toaster } from 'react-hot-toast'
 import PageLoader from './components/PageLoader.jsx'
 import useAuthUser from './hooks/useAuthUser.js'
 import Layout from './components/Layout.jsx'
-
+import useThemeStore from './store/useThemeStore.js'
 
 const App = () => {
   // 异步数据获取示例
@@ -40,6 +40,7 @@ const App = () => {
 
   // 使用自定义 Hook 获取认证用户信息
   const { isLoading, authUser } = useAuthUser()
+  const { theme, setTheme } = useThemeStore()
 
   // Boolean() 将任何值转换为布尔值
   // null, undefined, 0, "" 会被转换为 false
@@ -64,7 +65,7 @@ const App = () => {
   }
 
   return (
-    <div className='h-screen' data-theme="forest">
+    <div className='h-screen' data-theme={theme}>
       <Routes>
         {/* 登陆保护路由
         只有在 authUser 存在时才能访问主页

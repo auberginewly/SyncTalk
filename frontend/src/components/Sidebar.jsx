@@ -30,7 +30,7 @@ const Sidebar = () => {
                         ${currentPath === '/' ? 'btn-active' : ''}`}
                 >
                     <HomeIcon className="size-5 text-base-content opacity-70" />
-                    <span>家</span>
+                    <span>主页</span>
                 </Link>
 
                 {/* 好友列表 */}
