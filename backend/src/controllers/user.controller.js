@@ -127,24 +127,22 @@ export async function acceptFriendRequest(req, res) {
     }
 }
 
+
 // 获取别人发给我的处理/未处理的好友请求
 export async function getFriendRequests(req, res) {
     try {
-        // 查找所有发给当前用户的未处理好友请求
+        // 查找所有发给当前用户的未处理好友请求（别人发给你的，你需要接受）
         const incomingRequests = await FriendRequest
         .find({ recipient: req.user._id, status: 'pending' })
         .populate('sender', 'fullName profilePicture nativeLanguage learningLanguage'); // 只选择需要的字段
 
-        // 查找我发出的未处理请求
-        const outgoingRequests = await FriendRequest
-        .find({ sender: req.user._id, status: 'pending' })
-        .populate('recipient', 'fullName profilePicture nativeLanguage learningLanguage');
+        // 查找你发出的已被接受的请求（你发给别人的，对方已接受）
+        const acceptedRequests = await FriendRequest
+        .find({ recipient: req.user._id, status: 'accepted' })
+        .populate('sender', 'fullName profilePicture nativeLanguage learningLanguage'); // 只选择需要的字段
 
         // 返回结果
-        res.status(200).json({
-            incomingReqs: incomingRequests,
-            outgoingReqs: outgoingRequests
-        });
+        res.status(200).json({ incomingRequests, acceptedRequests });
     } catch (error) {
         // 捕获并处理错误
         console.error("获取好友请求错误:", error.message);
