@@ -49,12 +49,26 @@ export async function getRecommendUsers() {
     return response.data
 }
 
+// 获取用户发出的好友请求
 export async function getOutgoingFriendReqs() {
     const response = await axiosInstance.get('/users/outgoing-friend-requests')
     return response.data
 }
 
+// 发送好友请求
 export async function sendFriendReq(userId) {
     const response = await axiosInstance.post(`/users/friend-request/${userId}`)
+    return response.data
+}
+
+// 获取用户好友请求
+export async function getFriendRequests() {
+    const response = await axiosInstance.get('/users/friend-requests')
+    return response.data
+}
+
+// 接受好友请求
+export async function acceptFriendReq(requestId) {
+    const response = await axiosInstance.put(`/users/friend-request/${requestId}/accept`)
     return response.data
 }
