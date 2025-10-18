@@ -17,7 +17,7 @@ const streamClient = StreamChat.getInstance(apiKey, apiSecret);
 export const upsertStreamUser = async (userData) => {
     try {
         // userData 应包含 id, name, image 等字段
-        await serverClient.upsertUser(userData);
+        await streamClient.upsertUser(userData);
         return userData;
     } catch (error) {
         console.error("创建 Stream 用户失败:", error);
