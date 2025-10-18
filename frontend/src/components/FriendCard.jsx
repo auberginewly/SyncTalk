@@ -30,7 +30,7 @@ const FriendCard = ({friend}) => {
             </div>
 
             {/* 发消息按钮 chatpage */}
-            <Link to={`/chat/${friend.id}`} className='btn btn-outline w-full'>
+            <Link to={`/chat/${friend._id}`} className='btn btn-outline w-full'>
                 发消息
             </Link>
         </div>
