@@ -148,15 +148,15 @@ const NotificationsPage = () => {
                           <div className='flex items-start gap-3'>
                             <div className='avatar mt-1 size-10 rounded-full'>
                               <img 
-                                src={notification.sender.profilePicture}
-                                alt={notification.sender.fullName}
+                                src={notification.recipient.profilePicture}
+                                alt={notification.recipient.fullName}
                               />
                             </div>
 
                             <div className='flex-1'>
-                              <h3 className='font-semibold'>{notification.sender.fullName}</h3>
+                              <h3 className='font-semibold'>{notification.recipient.fullName}</h3>
                               <p className='text-sm my-1'>
-                                你接受了{notification.sender.fullName}的好友请求
+                                {notification.recipient.fullName}接受了你的好友请求
                               </p>
                               <p className='text-xs flex items-center opacity-70'>
                                 <ClockIcon className='h-3 w-3 mr-1' />
@@ -175,6 +175,49 @@ const NotificationsPage = () => {
                   </div>
                 </section>
               )}
+
+              {/* 你接受了别人的请求
+              {incomingRequests.length > 0 && (
+                <section className='space-y-4'>
+                  <h2 className='text-xl font-semibold flex items-center gap-2'>
+                    <BellIcon className='h-5 w-5 text-success' />
+                    新的联系人
+                  </h2>
+
+                  <div className='space-y-3'>
+                    {incomingRequests.map((notification) => (
+                      <div key={notification._id} className='card bg-base-200 shadow-sm'>
+                        <div className='card-body p-4'>
+                          <div className='flex items-start gap-3'>
+                            <div className='avatar mt-1 size-10 rounded-full'>
+                              <img 
+                                src={notification.sender.profilePicture}
+                                alt={notification.sender.fullName}
+                              />
+                            </div>
+
+                            <div className='flex-1'>
+                              <h3 className='font-semibold'>{notification.sender.fullName}</h3>
+                              <p className='text-sm my-1'>
+                                {notification.sender.fullName}接受了你的好友请求
+                              </p>
+                              <p className='text-xs flex items-center opacity-70'>
+                                <ClockIcon className='h-3 w-3 mr-1' />
+                                {formatRelativeTime(notification.updatedAt)}
+                              </p>
+                            </div>
+
+                            <div className='badge badge-success'>
+                              <MessageSquareIcon className='h-3 w-3 mr-1' />
+                              新的朋友
+                            </div>
+                          </div> 
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )} */}
 
               {/* 空状态 */}
               {incomingRequests.length === 0 && acceptedRequests.length === 0 && (

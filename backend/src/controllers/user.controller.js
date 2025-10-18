@@ -138,8 +138,8 @@ export async function getFriendRequests(req, res) {
 
         // 查找你发出的已被接受的请求（你发给别人的，对方已接受）
         const acceptedRequests = await FriendRequest
-        .find({ recipient: req.user._id, status: 'accepted' })
-        .populate('sender', 'fullName profilePicture nativeLanguage learningLanguage'); // 只选择需要的字段
+        .find({ sender: req.user._id, status: 'accepted' })
+        .populate('recipient', 'fullName profilePicture nativeLanguage learningLanguage'); // 只选择需要的字段
 
         // 返回结果
         res.status(200).json({ incomingRequests, acceptedRequests });
