@@ -15,6 +15,7 @@ import {
 import { StreamChat } from 'stream-chat'
 import toast from 'react-hot-toast'
 import ChatLoader from '../components/ChatLoader.jsx'
+import CallButton from '../components/CallButton.jsx'
 
 const STREAM_API_KEY = import.meta.env.VITE_STREAM_API_KEY
 
@@ -75,6 +76,18 @@ const ChatPage = () => {
     initChat()
   }, [tokenData, authUser, targetUserId])  
 
+  const handleVideoCall = () => {
+    if(channel) {
+      const callUrl = `${window.location.origin}/call/${channel.id}`
+
+      channel.sendMessage({
+        text: `📞 视频通话邀请: [点击这里加入视频通话](${callUrl})`,
+      })
+
+      toast.success('视频通话邀请已发送！')
+    } 
+  }
+
   // 加载指示器组件 加载中或者没连上聊天客户端或者频道
   if(loading || !chatClient || !channel) {
     return <ChatLoader/>
@@ -84,10 +97,11 @@ const ChatPage = () => {
       <Chat client={chatClient}>
         <Channel channel={channel}>
           <div className='w-full relative'>
+            <CallButton handleVideoCall={handleVideoCall} />
             <Window>
               <ChannelHeader />
               <MessageList />
-              <MessageInput focus/>
+              <MessageInput focus />
             </Window>
           </div>
           <Thread />

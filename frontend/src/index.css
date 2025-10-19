@@ -11,17 +11,19 @@
   justify-content: center !important;
   background: linear-gradient(to bottom, #c9e8c9, #b7e7bb) !important;
   height: 100% !important;
-  min-height: 100vh !important;
+  min-height: calc(100vh - 64px) !important; /* 减去 Navbar 高度 */
+  padding: 1.5rem !important; /* 添加内边距 */
 }
 
 /* 聊天主容器 - 确保白色背景 */
 .str-chat__container {
   max-width: 1200px !important;
   width: 100% !important;
-  height: 80% !important;
+  max-height: 85vh !important; /* 使用 max-height 而不是固定高度 */
+  height: auto !important; /* 改为自适应 */
   margin: 0 auto !important;
-  border-radius: 8px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
   overflow: hidden !important;
   background-color: #ffffff !important;
 }
@@ -30,6 +32,8 @@
 .str-chat__list {
   background-color: #ffffff !important;
   padding: 12px;
+  max-height: calc(85vh - 120px) !important; /* 减去头部和输入框高度 */
+  overflow-y: auto !important;
 }
 
 /* 隐藏列表通知 */
@@ -48,4 +52,15 @@
 .str-chat__message-list-scroll,
 .str-chat__header-livestream {
   background-color: #ffffff !important;
+}
+
+/* 响应式调整 - 在小屏幕上更紧凑 */
+@media (max-width: 768px) {
+  .str-chat__channel {
+    padding: 1rem !important;
+  }
+  
+  .str-chat__container {
+    max-height: 90vh !important;
+  }
 }

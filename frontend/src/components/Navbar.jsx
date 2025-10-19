@@ -19,7 +19,7 @@ const Navbar = () => {
         <div className='w-full px-4 sm:px-6 lg:px-8'>
 
             {/* 内层：内容布局 - ChatPage 用 justify-between，其他页面用 justify-end */}
-            <div className={`flex items-center w-full ${isChatPage ? 'justify-between' : 'justify-end'}`}>
+            <div className='flex items-center w-full justify-end'>
 
                 {/* LOGO 只在 ChatPage 显示 */}
                 {isChatPage && (
@@ -35,7 +35,7 @@ const Navbar = () => {
                 )}
 
                 {/* 右侧按钮组 - 包裹所有右侧元素 */}
-                <div className='flex items-center gap-3 sm:gap-4'>
+                <div className='flex items-center gap-3 sm:gap-4 ml-auto'>
                     {/* 跳转消息通知 */}
                     <Link to="/notifications">
                         <button className='btn btn-ghost btn-circle'>
