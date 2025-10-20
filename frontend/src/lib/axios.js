@@ -1,7 +1,9 @@
 import axios from 'axios'
 
+const BASE_URL = import.meta.env.MODE === 'development' ? 'http://localhost:5000/api' : '/api'  
+
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:5001/api", // 替换为你的后端 API 地址
+  baseURL: BASE_URL,
   withCredentials: true, // 允许携带 cookie send cookies with requests
   headers: {
     'Content-Type': 'application/json',

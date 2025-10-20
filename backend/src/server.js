@@ -9,9 +9,13 @@ import authRoutes from './routes/auth.route.js';
 import userRoutes from './routes/user.route.js';
 import chatRoutes from './routes/chat.route.js';
 import { connectDB } from './lib/db.js';
+import path from 'path';
 
 const app = express();
 const PORT = process.env.PORT;
+
+// // __dirname 不存在,需要手动创建
+const __dirname = path.resolve();
 
 // 解决跨域问题
 app.use(cors({
@@ -24,6 +28,14 @@ app.use(cookieParser()); // 解析 Cookie
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend', 'dist','index.html'));
+  })
+}
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
